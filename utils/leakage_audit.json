@@ -1,0 +1,21 @@
+{
+  "scaler_fit_only_on_train": true,
+  "train_eval_calib_disjoint": true,
+  "chronological_order_preserved": true,
+  "feature_target_no_temporal_overlap": true,
+  "calib_excluded_from_training_rows": true,
+  "no_duplicate_train_rows": true,
+  "no_duplicate_test_rows": true,
+  "constant_dimensions_in_train": [
+    5,
+    8,
+    17,
+    18,
+    27,
+    29,
+    37,
+    38
+  ],
+  "interpretation_label_never_used_as_feature": true,
+  "cross_machine_leakage": "N/A (single-machine run)"
+}

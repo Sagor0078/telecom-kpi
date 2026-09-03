@@ -1,0 +1,15 @@
+{
+  "python_version": "3.13.5 | packaged by Anaconda, Inc. | (main, Jun 12 2025, 16:09:02) [GCC 11.2.0]",
+  "platform": "Linux-7.0.0-30-generic-x86_64-with-glibc2.39",
+  "processor": "x86_64",
+  "numpy_version": "2.3.3",
+  "pandas_version": "2.3.2",
+  "sklearn_version": "1.7.2",
+  "torch_version": "2.12.1+cpu",
+  "lightgbm_version": "4.6.0",
+  "shap_version": "0.52.0",
+  "statsmodels_version": "0.15.0",
+  "networkx_version": "3.6.1",
+  "cuda_available": false,
+  "ram_kb": 16049204
+}
