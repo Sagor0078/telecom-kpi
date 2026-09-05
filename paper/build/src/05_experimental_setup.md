@@ -29,7 +29,7 @@ rather than merely adjacent:
 | Channels | 18 named PHY/MAC/network KPIs | 24 common metric columns | 38 anonymized dims |
 | Volume | 643,284 samples (~1,072 min) | 123 cases, 6-35 min pre-injection | 28,479 samples |
 | Events | 109 anomaly segments, 11 types | 123 injections, 5 fault types | 8 segments |
-| Localization ground truth | affected_kpis (named) | root-cause service + indicator | interpretation_label (dim indices) |
+| Localization ground truth | `affected_kpis` (named) | root-cause service + indicator | `interpretation_label` (dim indices) |
 | Split | session-level chronological 60/20/20 | fault-stratified case split 60/20/20 | chronological TRAIN/EVAL/CALIB |
 | Window / target | 3 s window, 5 s horizon | 60 s window, detection | 20 min window, 30 min horizon |
 
@@ -56,14 +56,14 @@ checked on the anomaly shard with zero mismatches, and one shard rebuilds
 to 99,680 timestamps (166.6 continuous minutes) with 7 holes totalling
 28.8 s (0.288% of the timeline).
 
-Two of the 18 channels (UL_Protocol, DL_Protocol) are categorical strings
+Two of the 18 channels (`UL_Protocol`, `DL_Protocol`) are categorical strings
 and are label-encoded; the remaining 16 are numeric.
 
 ## 5.3 Target construction and features
 
 We construct an early-warning target rather than a post-hoc detection
-target: y_t = 1 if a labeled anomaly occurs anywhere in (t, t+H\], using
-only data up to and including t. Tabular features are the rolling mean,
+target, (2): $y_t = 1$ if a labeled anomaly occurs anywhere in $(t,\,t+H]$,
+using only data up to and including $t$. Tabular features are the rolling mean,
 standard deviation, and last value per KPI dimension over the window; the
 sequence models additionally consume the raw window.
 
@@ -119,15 +119,15 @@ cross-family soft vote). Base models are a dummy prior, Logistic
 Regression, Random Forest, Extra Trees, XGBoost, LightGBM, an MLP, a 1D
 ResNet, LSTM, GRU, and a Transformer encoder.
 
-LightGBM: 300 trees, max depth 5, learning rate 0.05, scale_pos_weight set
-to the train-set negative/positive ratio. Transformer: input projection to
-d_model = 32, learned positional embedding, 2 encoder layers (4 attention
+LightGBM: 300 trees, max depth 5, learning rate 0.05, and
+`scale_pos_weight` set to the train-set negative/positive ratio. Transformer: input projection to
+$d_{\text{model}} = 32$, learned positional embedding, 2 encoder layers (4 attention
 heads, feed-forward dimension 64, dropout 0.1), mean-pooling over time, a
 2-layer classification head; trained with Adam (lr = 1e-3), weighted binary
 cross-entropy, batch size 256, 6 epochs. Granger causality: SSR F-test,
 lags 1-5, statsmodels implementation, with Benjamini-Hochberg FDR control
 across the tested dimensions. Split-conformal: least-ambiguous-set
-classifier (LAC) \[4\], target coverage 90% (alpha = 0.10), calibrated on
+classifier (LAC) \[4\], target coverage 90% ($\alpha = 0.10$), calibrated on
 the CALIB block. Personalized PageRank: networkx implementation on a
 reversed, hand-specified illustrative topology graph (Section 6.8), not fit
 to SMD, which has no topology.
@@ -144,7 +144,7 @@ equal-width bins) on the held-out EVAL block, with AUPRC read against each
 leg's base rate since the base rates differ by a factor of three across
 legs. Attribution: precision@k and recall@k of the top-k SHAP-ranked KPI
 dimensions against the ground-truth label set, compared to the chance level
-k/d. Causal filtering: Granger SSR F-test p-value (minimum across lags 1-5,
+$k/d$. Causal filtering: Granger SSR F-test p-value (minimum across lags $1$ to $5$,
 BH-FDR corrected) and Pearson correlation, reported side by side.
 Calibration: empirical coverage of the conformal prediction set against the
 90% target. Explanation quality: deletion-test faithfulness margin and

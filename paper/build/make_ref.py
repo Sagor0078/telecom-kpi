@@ -85,5 +85,18 @@ style('IEEE Abstract', size=9, bold=True, align='just', after=6, indent=0.2)
 style('IEEE Terms', size=9, bold=True, italic=True, align='just', after=10,
       indent=0.2)
 
+# Inline code (dataset field names, library parameters). Pandoc tags these
+# runs "VerbatimChar"; without the style they fall back to body Times and the
+# underscores read as prose.
+from docx.enum.style import WD_STYLE_TYPE
+vc = doc.styles.add_style('VerbatimChar', WD_STYLE_TYPE.CHARACTER)
+vc.font.name = 'Courier New'
+vc.font.size = Pt(8.5)
+_rPr = vc.element.get_or_add_rPr()
+_rf = OxmlElement('w:rFonts')
+for _a in ('w:ascii', 'w:hAnsi', 'w:cs'):
+    _rf.set(qn(_a), 'Courier New')
+_rPr.append(_rf)
+
 doc.save(OUT)
 print("wrote", OUT)

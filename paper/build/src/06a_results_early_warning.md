@@ -202,13 +202,13 @@ single-model variance is high.**
 
 **Table 9. Single model vs. 5-member deep ensemble on TelecomTS.**
 
-| **Architecture** | **AUPRC single -> M=5** | **ECE single -> M=5** |
+| **Architecture** | **AUPRC, single $\rightarrow$ M=5** | **ECE, single $\rightarrow$ M=5** |
 |---|---|---|
-| MLP | 0.680 -> 0.706 (+0.026) | 0.102 -> 0.090 (-0.011) |
-| 1D ResNet | 0.634 -> 0.743 (**+0.109**) | 0.080 -> 0.079 (-0.002) |
-| LSTM | 0.667 -> 0.646 (**-0.022**) | 0.103 -> 0.101 (-0.003) |
-| GRU | 0.651 -> 0.678 (+0.026) | 0.087 -> 0.080 (-0.006) |
-| Transformer | 0.702 -> 0.704 (+0.003) | 0.063 -> 0.063 (-0.000) |
+| MLP | 0.680 $\rightarrow$ 0.706 (+0.026) | 0.102 $\rightarrow$ 0.090 (-0.011) |
+| 1D ResNet | 0.634 $\rightarrow$ 0.743 (**+0.109**) | 0.080 $\rightarrow$ 0.079 (-0.002) |
+| LSTM | 0.667 $\rightarrow$ 0.646 (**-0.022**) | 0.103 $\rightarrow$ 0.101 (-0.003) |
+| GRU | 0.651 $\rightarrow$ 0.678 (+0.026) | 0.087 $\rightarrow$ 0.080 (-0.006) |
+| Transformer | 0.702 $\rightarrow$ 0.704 (+0.003) | 0.063 $\rightarrow$ 0.063 (-0.000) |
 
 The 1D ResNet gains most because its single-model variance is highest; the
 LSTM *loses* accuracy. ECE improvements are consistent in sign but small

@@ -86,6 +86,55 @@ def span(first_el, last_el):
     body.insert(j + 1, spacer(sect(1)))   # closes the 1-col span
     body.insert(i, spacer(sect(2)))       # closes the preceding 2-col run
 
+# ------------------------------------------- number display equations, IEEE
+# Pandoc emits <w:p><m:oMathPara><m:oMath/></m:oMathPara></w:p>. IEEE wants the
+# equation centred in the column with its number at the right margin, so the
+# math is unwrapped to inline and placed between a centre tab and a right tab.
+COL_TWIPS = int(3.5 * 1440)
+
+
+def _tab_run():
+    r = OxmlElement('w:r')
+    r.append(OxmlElement('w:tab'))
+    return r
+
+
+eq_count = 0
+for p in body.findall(qn('w:p')):
+    mpara = p.find(qn('m:oMathPara'))
+    if mpara is None:
+        continue
+    eq_count += 1
+    math = mpara.find(qn('m:oMath'))
+    at = list(p).index(mpara)
+    p.remove(mpara)
+
+    pPr = p.get_or_add_pPr()
+    for el in pPr.findall(qn('w:tabs')):
+        pPr.remove(el)
+    tabs = OxmlElement('w:tabs')
+    for val, pos in (('center', COL_TWIPS // 2), ('right', COL_TWIPS)):
+        t = OxmlElement('w:tab')
+        t.set(qn('w:val'), val)
+        t.set(qn('w:pos'), str(pos))
+        tabs.append(t)
+    # Tab stops must precede indentation-sensitive children; append is fine here
+    # because pPr holds only pStyle at this point.
+    pPr.append(tabs)
+    ind = OxmlElement('w:ind')
+    ind.set(qn('w:firstLine'), '0')
+    pPr.append(ind)
+
+    num = OxmlElement('w:r')
+    num.append(OxmlElement('w:tab'))
+    t = OxmlElement('w:t')
+    t.text = f'({eq_count})'
+    num.append(t)
+
+    p.insert(at, _tab_run())
+    p.insert(at + 1, math)
+    p.insert(at + 2, num)
+
 # -------------------------------------------------- find wide tables & figures
 def prev_para(el):
     prev = el.getprevious()

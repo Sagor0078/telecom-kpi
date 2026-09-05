@@ -63,6 +63,38 @@ Tables with 5 or more columns are automatically spanned full-width and set
 at 8pt. Keep first-column labels short — a long label in a many-column table
 wraps badly even at full width.
 
+### Math and code
+
+Write math as LaTeX: `$\hat{y}_t$` inline, `$$...$$` for display. Pandoc
+converts it to native Word equations (OMML), so Greek renders as symbols and
+subscripts are real subscripts. **Never write math as ASCII prose**
+(`phi_i`, `alpha`, `y_hat_t`) — that was the pre-existing style and it is
+not IEEE.
+
+Display equations are numbered automatically in document order, centred with
+the number at the right margin. Numbering comes from position, so inserting
+an equation renumbers everything after it — check any in-text references to
+equation numbers after adding one.
+
+Keep display equations narrow enough for a 3.5in column. Factor a long
+expression into two equations rather than letting it run into the gutter;
+`$$\phi_i(x) = \sum ... w_S[...]$$` plus a separate `$$w_S = ...$$` is the
+pattern used in §III.
+
+Dataset field names and library parameters go in backticks — `` `affected_kpis` ``,
+`` `scale_pos_weight` `` — which sets them in Courier via the `VerbatimChar`
+style. Metric names that read as prose should be prose ("rank stability
+$\rho$", not `` `stability_rho` ``).
+
+### Previewing math
+
+`libreoffice --headless --convert-to pdf` **mis-renders OMML**: closing `]`
+appears as `)`, `\setminus` and some delimiters show as `¿`. These are
+LibreOffice import bugs, not defects in the document — the underlying XML
+carries the correct `begChr`/`endChr`. Use the PDF to check layout, column
+fit and numbering, but **open the .docx in Word to check the equations
+themselves**.
+
 ## Stages
 
 | Script | Does |

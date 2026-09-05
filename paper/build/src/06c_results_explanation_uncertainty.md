@@ -29,9 +29,9 @@ drop from deleting five random dimensions, averaged over 200 repeats. A
 faithful explanation should cause the larger drop.
 
 *Stability (perturbation test).* For each event's pre-onset window we add
-Gaussian noise (sigma = 0.05 in standardized units, roughly 5% of one
+Gaussian noise ($\sigma = 0.05$ in standardized units, roughly 5% of one
 standard deviation), recompute features and the SHAP ranking, and compare to
-the unperturbed ranking by Spearman rho, averaged over 20 draws.
+the unperturbed ranking by Spearman $\rho$, averaged over 20 draws.
 
 *Attribution entropy* is a third, perturbation-free proxy: low normalized
 entropy means SHAP concentrates attribution on a few dimensions.
@@ -40,11 +40,11 @@ By the deletion test the explanations pass on all eight events. But the
 margin varies enormously \-- from 0.9999 against 0.194 for random deletion on
 segment 15849-16368, to 0.208 against 0.200 on segment 20786-21195, a
 difference that is essentially nothing. Three of the eight events also begin
-from a base probability above 0.999, i.e. the model is already at its output
+from a base probability above 0.999, i.e., the model is already at its output
 ceiling before any deletion, so "top-5 deletion drops probability more than
 random" is close to a floor effect on those events rather than strong
-evidence. Rankings are highly stable (Spearman rho 0.990-0.998 across all
-eight events), but stability is a property of the explanation, not of its
+evidence. Rankings are highly stable (Spearman $\rho$ from 0.990 to 0.998 across
+all eight events), but stability is a property of the explanation, not of its
 correctness.
 
 That distinction is what the next test isolates. Every one of the eight
@@ -60,10 +60,10 @@ partitioned by whether root-cause localization was correct (SMD, n = 8).**
 
 | **Signal** | **RCA-correct mean (n=4)** | **RCA-wrong mean (n=4)** | **Difference** |
 |---|---|---|---|
-| p_hat (predicted probability) | 0.995 | 0.991 | 0.004 |
-| attribution_entropy (SHAP spread) | 0.712 | 0.696 | 0.016 |
-| stability_rho (rank stability) | 0.992 | 0.995 | **-0.003** |
-| faithfulness_margin (deletion test) | 0.510 | 0.515 | **-0.005** |
+| Predicted probability $\hat{p}$ | 0.995 | 0.991 | 0.004 |
+| Attribution entropy | 0.712 | 0.696 | 0.016 |
+| Rank stability $\rho$ | 0.992 | 0.995 | **-0.003** |
+| Faithfulness margin | 0.510 | 0.515 | **-0.005** |
 
 None of the four separates the groups by any meaningful margin, and two of
 them \-- stability and faithfulness \-- point in the *wrong* direction,
@@ -93,10 +93,10 @@ validated against localization ground truth.
 
 ## 6.6 Component 5 \-- Uncertainty quantification
 
-Split-conformal calibration on the CALIB block yields q_hat = 0.985 and
+Split-conformal calibration on the CALIB block yields $\hat{q} = 0.985$ and
 achieves 0.955 empirical coverage on EVAL against the 90% target \-- a
 valid, if conservative, guarantee. 20.0% of EVAL windows are routed to the
-ambiguous ({normal, degrading}) set, i.e. an explicit escalate-to-human
+ambiguous ({normal, degrading}) set, i.e., an explicit escalate-to-human
 signal, and 0.0% to the empty set. The raw probability's ECE on EVAL is
 0.118: Figure 8 shows the model is overconfident in its top bin (mean
 predicted probability 0.986, empirical positive rate 0.752), exactly the

@@ -3,8 +3,8 @@
 Because the best predictor is a tree model on every leg (Section 6.1), the
 TreeExplainer attribution is exact rather than approximate. For every SMD
 ground-truth segment we take the attribution at the last window before
-onset, aggregate \|SHAP\| across each KPI dimension's mean/std/last
-features, and rank dimensions. Table 10 reports precision@k = recall@k (k
+onset, aggregate $|\phi_i|$ from (4) across each KPI dimension's
+mean/std/last features, and rank dimensions. Table 10 reports precision@k = recall@k (k
 set to the ground-truth set size) per segment; EVAL and CALIB segments are
 genuinely out-of-sample, while TRAIN-block segments are in-sample and shown
 only for contrast.
@@ -30,7 +30,7 @@ finding rather than only the best-case segment. Section 6.5 returns to the
 three out-of-sample segments where localization is wrong, because *which*
 events those are turns out to matter more than the mean.
 
-Localization is scored on SMD only. Both TelecomTS (named affected_kpis)
+Localization is scored on SMD only. Both TelecomTS (named `affected_kpis`)
 and RCAEval (root-cause service and indicator) ship localization ground
 truth and both loaders expose it, but the ranking is not yet scored on
 either; that is the immediate next experiment (Section 9).

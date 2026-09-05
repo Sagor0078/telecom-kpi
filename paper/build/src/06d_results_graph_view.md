@@ -2,7 +2,7 @@
 
 Neither SMD nor the reconstructed TelecomTS sessions provide a
 network-element topology, so this experiment is explicitly illustrative: a
-synthetic Core -> Aggregation -> BaseStation -> Cell graph with an injected
+synthetic Core $\rightarrow$ Aggregation $\rightarrow$ BaseStation $\rightarrow$ Cell graph with an injected
 root cause at Aggregation and severity decaying (with noise) along
 descendants. Personalized PageRank on the reversed graph, seeded by observed
 node severity, ranks Aggregation first (score 0.319), correctly recovering

@@ -21,7 +21,7 @@ Four experiments follow immediately from what Section 6 does not establish,
 in rough order of how much they would change the paper's claims.
 
 *Score localization on the telecom legs.* This is the largest gap. Both
-TelecomTS (named affected_kpis) and RCAEval (root-cause service and
+TelecomTS (named `affected_kpis`) and RCAEval (root-cause service and
 indicator) ship localization ground truth, and both loaders already expose
 it; the fixed-k metrics of Section 5.6 are implemented. Until this is run,
 attribution quality is a claim about server telemetry only, and the
