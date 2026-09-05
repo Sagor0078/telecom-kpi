@@ -14,12 +14,11 @@ python3 -c 'import docx' 2>/dev/null || { echo "error: python-docx not installed
 echo "1/5 building IEEE style template"
 python3 make_ref.py "$WORK/ieee-reference.docx"
 
-echo "2/5 splicing manuscript sections"
-python3 splice.py src "$WORK/paper_v2.md"
+echo "2/5 collecting sections"
+python3 splice.py src "$WORK/paper.md"
 
-echo "3/5 applying IEEE section numbering"
-python3 transform.py "$WORK/paper_v2.md" "$WORK/body.md" "$WORK/front.json"
-cp src/title_override.txt "$WORK/"
+echo "3/5 applying IEEE numbering"
+python3 transform.py "$WORK/paper.md" src/frontmatter.md "$WORK/body.md" "$WORK/front.json"
 
 echo "4/5 converting to docx"
 # --resource-path=.. resolves the figures/ references against paper/.

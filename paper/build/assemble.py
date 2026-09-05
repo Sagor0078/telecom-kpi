@@ -1,17 +1,13 @@
 """Assemble the IEEE docx: single-column title block, two-column body,
 full-width spanning sections for wide tables and figures."""
-import json, sys, copy, os, re
+import json, sys, copy, re
 from docx import Document
 from docx.shared import Pt
 from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
 
 body_docx, front_json, out = sys.argv[1], sys.argv[2], sys.argv[3]
-override = os.path.join(os.path.dirname(front_json), 'title_override.txt')
-
 fm = json.load(open(front_json))
-if os.path.exists(override):
-    fm['title'] = open(override).read().strip()
 
 doc = Document(body_docx)
 body = doc.element.body
