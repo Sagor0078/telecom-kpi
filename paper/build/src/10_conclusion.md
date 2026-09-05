@@ -1,19 +1,19 @@
 # 10. Conclusion
 
 We presented TrustNet-RCA, a five-component framework that treats
-trustworthiness as a set of separately measurable properties \-- prediction,
-attribution, causal filtering, explanation, and calibrated uncertainty \--
+trustworthiness as a set of separately measurable properties (prediction,
+attribution, causal filtering, explanation, and calibrated uncertainty)
 rather than as an emergent quality of one opaque model, and evaluated it
-under one identical method across a 5G RAN benchmark (TelecomTS), a
-service-management RCA benchmark (RCAEval), and an out-of-domain server
-telemetry benchmark (SMD).
+under one identical method across a 5G RAN benchmark (TelecomTS), a service-
+management RCA benchmark (RCAEval), and an out-of-domain server telemetry
+benchmark (SMD).
 
 Three results are worth carrying forward. First, gradient-boosted trees beat
 attention models on all three legs at a fraction of the training cost; we
 report this negative result as one, and note that it keeps exact
 TreeExplainer attribution available throughout. Second, accuracy and
 calibration pull against each other, and conformal prediction resolves the
-tension rather than trading it off \-- delivering tree accuracy under a
+tension rather than trading it off, delivering tree accuracy under a
 distribution-free coverage guarantee, which is the strongest case this work
 makes for conformal methods as a management-plane primitive. Third, and most
 consequentially, none of the confidence or explanation-quality signals the
@@ -32,6 +32,6 @@ These results establish that the proposed decomposition is measurable and
 instrumentable against ground truth on a public 5G benchmark. They do not
 establish that it outperforms simpler alternatives, that localization
 transfers beyond SMD, or that any of it survives contact with an operator
-network \-- claims requiring the multi-seed, multi-system, statistically
+network. Those claims require the multi-seed, multi-system, statistically
 validated study defined in Section 9, which we intend as the next stage of
 this work.

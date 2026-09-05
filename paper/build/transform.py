@@ -14,7 +14,6 @@ fm_raw = pathlib.Path(sys.argv[2]).read_text()
 
 
 def unescape(s):
-    s = s.replace(r'\--', '—').replace(' -- ', ' — ')
     for ch in '~[]|*_$#<>"':
         s = s.replace('\\' + ch, ch)
     return s
@@ -54,7 +53,6 @@ body = re.sub(r'\bSection (\d+)\b',
 body = re.sub(r'\bSections (\d+) and (\d+)\b',
               lambda m: f'Sections {ROMAN[int(m.group(1))]} and {ROMAN[int(m.group(2))]}',
               body)
-body = body.replace(r'\--', '—').replace(' -- ', ' — ')
 # Figures wider than one column are placed as full-width spans by assemble.py.
 body = re.sub(r'\{width="([\d.]+)in"\s+height="[\d.]+in"\}',
               lambda m: '{width="7.0in"}' if float(m.group(1)) >= 5.0 else '{width="3.4in"}',

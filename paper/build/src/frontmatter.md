@@ -4,8 +4,41 @@ AUTHORS: Author Name(s) to be added
 
 AFFILIATION: Affiliation to be added
 
-ABSTRACT:
-Telecom operators increasingly deploy machine learning to predict service degradation, but an accurate prediction is not the same as a trustworthy one: an engineer also needs to know which KPI is responsible, whether that KPI is merely correlated with the fault or plausibly causes it, why the system believes so, and how confident to be. Prior work on root-cause analysis (RCA) for multivariate telemetry typically evaluates a single mechanism -- feature attribution, causal discovery, or uncertainty quantification -- in isolation; no study we identified jointly integrates and evaluates all three against ground-truth root-cause labels. We present TrustNet-RCA, a five-component framework chaining (1) a probabilistic early-warning predictor, (2) exact feature attribution, (3) a causal-precedence filter, (4) an evidence-grounded explainer, and (5) distribution-free uncertainty calibration, and evaluate it under one identical method on three public datasets: TelecomTS (5G testbed telemetry, 18 named PHY/MAC/network KPIs) as the primary 5G RAN benchmark, RCAEval (annotated microservice failures) for service-management rigor, and the Server Machine Dataset (SMD) strictly as an out-of-domain generalization check. On TelecomTS, 5 s-ahead early warning reaches 0.920 AUROC / 0.794 AUPRC against a 0.167 base rate, with gradient-boosted trees beating an attention model by 0.092 AUPRC at 1/43 the training cost -- a negative result for attention that holds on all three legs. Accuracy and calibration pull in opposite directions (tree ECE 0.120 vs. deep-ensemble 0.082), which is the empirical case for the conformal layer: on SMD it attains its 90% target coverage (0.955 empirical) while routing 20% of windows to explicit human escalation. Out-of-sample attribution reaches 0.529 mean precision/recall@k against a ~0.174 chance level, and a Granger filter separates causally-consistent candidates from correlation-only ones. Our central finding is negative and concerns trust itself: a deletion-and-perturbation audit of the explanation layer shows that none of four confidence signals -- predicted probability, attribution entropy, rank stability, faithfulness margin -- separates correctly-localized incidents from mis-localized ones. The system can be maximally confident, produce a stable and deletion-faithful explanation, and still name the wrong KPI. We report per-anomaly-type results (AUPRC 0.101-0.823) and pre-onset runway limits rather than aggregate scores, and define the multi-seed, multi-system programme required to generalize these findings.
+ABSTRACT: Telecom operators increasingly deploy machine learning to predict
+service degradation, but an accurate prediction is not the same as a
+trustworthy one: an engineer also needs to know which KPI is responsible,
+whether that KPI is merely correlated with the fault or plausibly causes it,
+why the system believes so, and how confident to be. Prior work on root-
+cause analysis (RCA) for multivariate telemetry typically evaluates a single
+mechanism (feature attribution, causal discovery, or uncertainty
+quantification) in isolation; no study we identified jointly integrates and
+evaluates all three against ground-truth root-cause labels. We present
+TrustNet-RCA, a five-component framework chaining (1) a probabilistic early-
+warning predictor, (2) exact feature attribution, (3) a causal-precedence
+filter, (4) an evidence-grounded explainer, and (5) distribution-free
+uncertainty calibration, and evaluate it under one identical method on three
+public datasets: TelecomTS (5G testbed telemetry, 18 named PHY/MAC/network
+KPIs) as the primary 5G RAN benchmark, RCAEval (annotated microservice
+failures) for service-management rigor, and the Server Machine Dataset (SMD)
+strictly as an out-of-domain generalization check. On TelecomTS, 5 s-ahead
+early warning reaches 0.920 AUROC / 0.794 AUPRC against a 0.167 base rate,
+with gradient-boosted trees beating an attention model by 0.092 AUPRC at
+1/43 the training cost, a negative result for attention that holds on all
+three legs. Accuracy and calibration pull in opposite directions (tree ECE
+0.120 vs. deep-ensemble 0.082), which is the empirical case for the
+conformal layer: on SMD it attains its 90% target coverage (0.955 empirical)
+while routing 20% of windows to explicit human escalation. Out-of-sample
+attribution reaches 0.529 mean precision/recall@k against a ~0.174 chance
+level, and a Granger filter separates causally-consistent candidates from
+correlation-only ones. Our central finding is negative and concerns trust
+itself: a deletion-and-perturbation audit of the explanation layer shows
+that none of four confidence signals (predicted probability, attribution
+entropy, rank stability, faithfulness margin) separates correctly-localized
+incidents from mis-localized ones. The system can be maximally confident,
+produce a stable and deletion-faithful explanation, and still name the wrong
+KPI. We report per-anomaly-type results (AUPRC 0.101-0.823) and pre-onset
+runway limits rather than aggregate scores, and define the multi-seed,
+multi-system programme required to generalize these findings.
 
 INDEX TERMS:
 trustworthy AI; root-cause analysis; AIOps; 5G RAN; conformal prediction; causal inference; explainable AI; explanation faithfulness; telecom network management; time-series anomaly prediction

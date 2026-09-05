@@ -63,6 +63,21 @@ Tables with 5 or more columns are automatically spanned full-width and set
 at 8pt. Keep first-column labels short — a long label in a many-column table
 wraps badly even at full width.
 
+### No em dashes
+
+This paper does not use em dashes. Use a comma, colon, semicolon,
+parentheses, or a sentence break instead — whichever the join actually
+calls for. Paired dashes around an aside become parentheses; a single dash
+introducing an appositive becomes a comma or a colon.
+
+`splice.py` rejects `\--`, ` -- ` and a literal em dash anywhere in the
+body and aborts the build, quoting the offending sentence, so one cannot
+creep back in through an edit or a paste.
+
+The two exceptions are the `Abstract—` and `Index Terms—` prefixes, which
+are prescribed by the IEEE template and are emitted by `assemble.py`, not by
+the Markdown. They are formatting marks rather than prose punctuation.
+
 ### Math and code
 
 Write math as LaTeX: `$\hat{y}_t$` inline, `$$...$$` for display. Pandoc

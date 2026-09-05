@@ -7,17 +7,17 @@ detection confirms they remain competitive with deep alternatives on
 tabular telemetry \[8\].
 
 Deep learning and Transformers. Recurrent and variational architectures
-dominate multivariate KPI anomaly detection: OmniAnomaly \[7\] models
-KPI vectors with a stochastic RNN and is also the source of the SMD
-dataset used in this study; LSTM-NDT \[9\] forecasts KPI values and
-flags deviation with a non-parametric dynamic threshold. Self-attention
-architectures improve on recurrence for long-range temporal dependence
-\[10\]; TranAD \[11\] uses an adversarially trained transformer encoder
-for multivariate anomaly detection. Closest to our domain, \[12\] fuses
-a transformer temporal encoder with a graph neural network over 5G RAN
-topology for anomaly root-causing \-- effectively Components 1 and 2 of
-our framework, evaluated on real (non-public) RAN data but without a
-causal-versus-correlational distinction or calibrated uncertainty.
+dominate multivariate KPI anomaly detection: OmniAnomaly \[7\] models KPI
+vectors with a stochastic RNN and is also the source of the SMD dataset used
+in this study; LSTM-NDT \[9\] forecasts KPI values and flags deviation with
+a non-parametric dynamic threshold. Self-attention architectures improve on
+recurrence for long-range temporal dependence \[10\]; TranAD \[11\] uses an
+adversarially trained transformer encoder for multivariate anomaly
+detection. Closest to our domain, \[12\] fuses a transformer temporal
+encoder with a graph neural network over 5G RAN topology for anomaly root-
+causing. That is effectively Components 1 and 2 of our framework, evaluated
+on real (non-public) RAN data but without a causal-versus-correlational
+distinction or calibrated uncertainty.
 
 Graph neural networks. Once more than one KPI stream and a known
 topology are available, root-cause evidence can propagate along
@@ -36,10 +36,10 @@ as causal-graph builders for RCA.
 
 RCA benchmarking. RCAEval \[5\] standardizes precision@k, MRR, and MAP@k
 evaluation across 735 failure cases spanning eleven fault types in three
-microservice systems; LEMMA-RCA \[6\] extends multi-domain, multi-modal
-RCA evaluation to IT and operational-technology systems. Neither
-benchmark ablates the joint contribution of causal filtering and
-calibrated uncertainty on top of attribution \-- the gap this paper targets.
+microservice systems; LEMMA-RCA \[6\] extends multi-domain, multi-modal RCA
+evaluation to IT and operational-technology systems. Neither benchmark
+ablates the joint contribution of causal filtering and calibrated
+uncertainty on top of attribution, which is the gap this paper targets.
 
 LLM-based approaches. Recent AIOps systems use large language models
 strictly as narrators over verified, tool-collected evidence rather than

@@ -10,7 +10,7 @@ types are injected; Jamming is the one real over-the-air phenomenon, and
 those seven events have zero pre-onset runway. Results on injected faults
 may not transfer to naturally occurring RAN degradation. The dataset is also
 testbed-derived, not operator-network data, and involves no O-RAN interfaces
-or components \-- we make no O-RAN claim.
+or components; we make no O-RAN claim.
 
 **SMD is not telecom data and is not treated as such.** Its 38 dimensions
 are generic server metrics, not named radio KPIs. It is reported strictly as
@@ -20,7 +20,7 @@ should be read as a measurement about radio behavior.
 **Localization is scored on one leg only.** Section 6.3's attribution
 results are SMD-only. TelecomTS and RCAEval both ship localization ground
 truth, and both loaders expose it, but the root-cause ranking is not yet
-scored on either \-- so "RCA rigor" is not yet earned on the leg assigned to
+scored on either, so "RCA rigor" is not yet earned on the leg assigned to
 carry it.
 
 **One RCAEval system of nine.** Only RE1 / Online Boutique is used: 123 of
@@ -34,8 +34,8 @@ only.
 **No statistical validation.** Every leg is a single seed and a single
 split. No significance testing, confidence intervals, or effect sizes are
 computed, and hyperparameters were fixed by hand on SMD and reused verbatim
-elsewhere \-- deliberately, to keep the legs comparable, but it means no leg
-is tuned and all numbers are untuned-baseline numbers.
+elsewhere. That was deliberate, to keep the legs comparable, but it means no
+leg is tuned and all numbers are untuned-baseline numbers.
 
 **The Component 4 audit is underpowered.** The confidence-quality result in
 Section 6.5 rests on eight events on one machine, partitioned four against

@@ -1,4 +1,4 @@
-## 6.8 Component 2, graph view \-- illustrative topology-based ranking
+## 6.8 Component 2, graph view: illustrative topology-based ranking
 
 Neither SMD nor the reconstructed TelecomTS sessions provide a
 network-element topology, so this experiment is explicitly illustrative: a

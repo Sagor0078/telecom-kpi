@@ -51,6 +51,12 @@ for ref in re.findall(r'!\[\]\(([^)]+)\)', body):
     if not (paper_dir / rel).exists():
         problems.append(f'missing figure: {rel}')
 
+# Em dashes are not used in this paper; commas, colons, parentheses or a
+# sentence break carry the same joins. Reject them rather than converting.
+for m in re.finditer(r'\\--| -- |\u2014', body):
+    ctx = ' '.join(body[max(0, m.start() - 45):m.end() + 45].split())
+    problems.append(f'em dash: ...{ctx}...')
+
 if problems:
     sys.exit('error: ' + '\nerror: '.join(problems))
 

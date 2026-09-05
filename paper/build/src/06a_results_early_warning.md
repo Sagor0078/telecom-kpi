@@ -1,6 +1,6 @@
 # 6. Results
 
-## 6.1 Component 1 \-- Early warning across three domains
+## 6.1 Component 1: Early warning across three domains
 
 Table 4 reports the full model hierarchy on the TelecomTS EVAL block at a
 5 s horizon. This is the discriminative leg: a 0.160 AUPRC spread
@@ -28,16 +28,16 @@ segments, base rate 0.167).**
 | GRU | Recurrent | 0.856 | 0.651 | 0.087 | 0.645 | 13.7 |
 | LSTM (M=5) | Deep ensemble | 0.821 | 0.646 | 0.101 | 0.660 | 65.8 |
 | 1D ResNet | Convolutional | 0.813 | 0.634 | 0.080 | 0.637 | 21.1 |
-| Dummy prior | Naive | 0.500 | 0.167 | 0.082 | 0.287 | \-- |
+| Dummy prior | Naive | 0.500 | 0.167 | 0.082 | 0.287 | n/a |
 
 On RCAEval the same hierarchy is applied to a detection target. The leg is
-saturated: every non-naive model reaches at least 0.990 AUROC, with
-XGBoost at 0.996 AUROC / 0.997 AUPRC / 0.012 ECE and even Logistic
-Regression at 0.993 / 0.994. Post-injection CPU, memory, and latency
-shifts in a microservice mesh are large and immediate, so this leg
-discriminates poorly between methods. We therefore use RCAEval for its
-assigned job \-- RCA quality and baseline comparison \-- rather than as a
-detection benchmark, and do not report its full table here.
+saturated: every non-naive model reaches at least 0.990 AUROC, with XGBoost
+at 0.996 AUROC / 0.997 AUPRC / 0.012 ECE and even Logistic Regression at
+0.993 / 0.994. Post-injection CPU, memory, and latency shifts in a
+microservice mesh are large and immediate, so this leg discriminates poorly
+between methods. We therefore use RCAEval for its assigned job (RCA quality
+and baseline comparison) rather than as a detection benchmark, and do not
+report its full table here.
 
 On SMD, the out-of-domain leg at a 30-minute horizon, Extra Trees reaches
 0.953 AUROC / 0.905 AUPRC and the Transformer 0.924 / 0.886 against a
@@ -60,10 +60,10 @@ colored by model family.*
 
 *Figure 6. ROC and precision-recall curves for the leading models.*
 
-**Finding 1 \-- tree ensembles win accuracy on every leg, and attention
-does not pay for itself.** The ordering is stable across three sampling
-rates (10 Hz / 1 Hz / one per minute), three channel counts (18 / 24 / 38),
-and three domains.
+**Finding 1: tree ensembles win accuracy on every leg, and attention does
+not pay for itself.** The ordering is stable across three sampling rates (10
+Hz / 1 Hz / one per minute), three channel counts (18 / 24 / 38), and three
+domains.
 
 **Table 6. Best tree model vs. Transformer, per leg.**
 
@@ -99,14 +99,14 @@ inside an anomaly segment.**
 | 20 | 0.766 | 4.0x | 0.335 | 0.753 | 245 |
 | 30 | 0.730 | 4.3x | 0.316 | 0.768 | 225 |
 
-The two columns tell opposite stories, and the disagreement is the
-finding. Measured over all windows, shorter horizons look better;
-measured over genuine pre-onset windows only, they look far worse
-(AUPRC 0.047 at 1 s against a 0.008 base rate, AUROC 0.605 \-- barely
-above chance). Anticipation improves monotonically with horizon up to
-20 s because longer horizons admit more pre-onset positives to learn
-from. We report the clean column as the operative one and treat the
-5 s headline of Table 4 as an upper bound rather than a capability claim.
+The two columns tell opposite stories, and the disagreement is the finding.
+Measured over all windows, shorter horizons look better; measured over
+genuine pre-onset windows only, they look far worse (AUPRC 0.047 at 1 s
+against a 0.008 base rate, AUROC 0.605, barely above chance). Anticipation
+improves monotonically with horizon up to 20 s because longer horizons admit
+more pre-onset positives to learn from. We report the clean column as the
+operative one and treat the 5 s headline of Table 4 as an upper bound rather
+than a capability claim.
 
 ![](figures/fig9_horizon_sweep.png){width="7.0in" height="2.7in"}
 
@@ -115,13 +115,13 @@ scoring shown together.*
 
 The ceiling is set by how much pre-onset telemetry each incident actually
 provides. Across the 109 TelecomTS anomaly segments the median pre-onset
-runway is 11.1 s and the maximum is 21.3 s: 94% of events afford at least
-1 s of warning, 84% at least 5 s, 71% at least 10 s, and **none** affords
-30 s. A 30 s horizon is therefore not a modelling failure but an
-ill-posed request on this data. The seven Jamming events \-- the one
-anomaly type in TelecomTS that is a real over-the-air phenomenon rather
-than an injected one \-- have exactly zero runway: their onset coincides
-with the start of the session, so no precursor exists to detect.
+runway is 11.1 s and the maximum is 21.3 s: 94% of events afford at least 1
+s of warning, 84% at least 5 s, 71% at least 10 s, and **none** affords 30
+s. A 30 s horizon is therefore not a modelling failure but an ill-posed
+request on this data. The seven Jamming events (the one anomaly type in
+TelecomTS that is a real over-the-air phenomenon rather than an injected
+one) have exactly zero runway: their onset coincides with the start of the
+session, so no precursor exists to detect.
 
 ![](figures/fig5_preonset_runway.png){width="7.0in" height="2.4in"}
 
@@ -145,41 +145,41 @@ number conceals. Table 8 breaks the TelecomTS result down by type.
 | Buffer Overflow (Gradual Buildup) | 48 | 0.877 | 0.116 |
 | Co-Channel Interference (Mild) | 56 | 0.878 | 0.101 |
 
-AUPRC spans 0.101 to 0.823 \-- an eightfold range \-- while AUROC stays in
-a narrow 0.877-0.971 band. An operator reading only AUROC would conclude
-the system performs uniformly well across fault types; the precision-recall
-view shows it does not. Severe, physically abrupt faults (antenna failure)
-are caught reliably; mild interference and gradual buffer buildup are close
-to unusable at this horizon.
+AUPRC spans 0.101 to 0.823, an eightfold range, while AUROC stays in a
+narrow 0.877-0.971 band. An operator reading only AUROC would conclude the
+system performs uniformly well across fault types; the precision-recall view
+shows it does not. Severe, physically abrupt faults (antenna failure) are
+caught reliably; mild interference and gradual buffer buildup are close to
+unusable at this horizon.
 
 ![](figures/fig10_per_anomaly_type.png){width="7.0in" height="3.6in"}
 
 *Figure 10. Per-anomaly-type AUROC and AUPRC on TelecomTS, showing that an
 aggregate score hides an eightfold spread in precision-recall performance.*
 
-**Correction: early warning is ill-posed on RCAEval.** Our dataset
-strategy originally assigned early-warning experiments to TelecomTS *and*
-RCAEval. That did not survive contact with the data, and we record the
-correction rather than dropping it silently. RCAEval's faults are
-externally scheduled injections: the system is normal up to the injection
-instant, so no precursor exists at any horizon. A first attempt at a 300 s
-early-warning target produced AUROC 0.436-0.534 across all models \--
-chance. Two causes were separable. The intrinsic one is that anticipating
-a scheduled intervention from pre-intervention telemetry is not a learnable
+**Correction: early warning is ill-posed on RCAEval.** Our dataset strategy
+originally assigned early-warning experiments to TelecomTS *and* RCAEval.
+That did not survive contact with the data, and we record the correction
+rather than dropping it silently. RCAEval's faults are externally scheduled
+injections: the system is normal up to the injection instant, so no
+precursor exists at any horizon. A first attempt at a 300 s early-warning
+target produced AUROC 0.436 to 0.534 across all models, no better than
+chance. Two causes were separable. The intrinsic one is that anticipating a
+scheduled intervention from pre-intervention telemetry is not a learnable
 problem. The second was our own method error: splitting cases
 chronologically by injection time perfectly segregated fault types across
 blocks, and cases are independent experiments, so the split must be
-stratified by fault type. It now is. The consequence is that **the
-early-warning anchor of this paper rests on TelecomTS alone**, a real
+stratified by fault type. It now is. The consequence is that **the early-
+warning anchor of this paper rests on TelecomTS alone**, a real
 concentration of risk that we state in Section 8 rather than smooth over.
 
 ## 6.2 Accuracy and calibration pull in opposite directions
 
-**Finding 2.** On TelecomTS the tree models average ECE 0.120 while the
-deep ensembles average 0.082 \-- a 1.5x calibration gap running *against*
-the accuracy gap. The best-calibrated non-trivial models are the
-Transformer and Deep ensemble (Transformer) at ECE 0.063; the most
-accurate, XGBoost, sits at 0.120.
+**Finding 2.** On TelecomTS the tree models average ECE 0.120 while the deep
+ensembles average 0.082, a 1.5x calibration gap running *against* the
+accuracy gap. The best-calibrated non-trivial models are the Transformer and
+Deep ensemble (Transformer) at ECE 0.063; the most accurate, XGBoost, sits
+at 0.120.
 
 ![](figures/fig4_accuracy_vs_calibration.png){width="7.0in" height="3.1in"}
 
@@ -197,8 +197,8 @@ without requiring tree calibration and without the deep ensemble's
 contribution: conformal prediction as a management-plane primitive,
 supported by a measured tension rather than an assertion.
 
-**Finding 3 \-- deep ensembling helps unevenly, and mainly where
-single-model variance is high.**
+**Finding 3: deep ensembling helps unevenly, and mainly where single-model
+variance is high.**
 
 **Table 9. Single model vs. 5-member deep ensemble on TelecomTS.**
 
@@ -212,20 +212,20 @@ single-model variance is high.**
 
 The 1D ResNet gains most because its single-model variance is highest; the
 LSTM *loses* accuracy. ECE improvements are consistent in sign but small
-(0.000 to 0.011) \-- materially weaker than the deep-ensemble literature
+(0.000 to 0.011), materially weaker than the deep-ensemble literature
 suggests, and reported as measured. Two practical notes: the MLP matches
 LSTM and GRU accuracy at roughly a tenth of the cost (1.5 s vs. 12.6 and
-13.7 s), and the 5-member 1D ResNet ensemble is the best accuracy-calibration
-compromise on TelecomTS at AUPRC 0.743 and ECE 0.079.
+13.7 s), and the 5-member 1D ResNet ensemble is the best accuracy-
+calibration compromise on TelecomTS at AUPRC 0.743 and ECE 0.079.
 
 ![](figures/fig7_deep_ensemble.png){width="7.0in" height="2.5in"}
 
 *Figure 7. Single model against 5-member deep ensemble, AUPRC and ECE.*
 
-**Finding 4 \-- the soft-vote ensemble does not earn its keep.** On
-TelecomTS it costs 1,228 s \-- the sum of every member's training time \--
-for AUPRC 0.741, below XGBoost alone at 1.4 s. On RCAEval it is strictly
-dominated. On an operational cost basis this is a recommend-against.
+**Finding 4: the soft-vote ensemble does not earn its keep.** On TelecomTS
+it costs 1,228 s (the sum of every member's training time) for AUPRC 0.741,
+below XGBoost alone at 1.4 s. On RCAEval it is strictly dominated. On an
+operational cost basis this is a recommend-against.
 
 ![](figures/fig12_efficiency.png){width="7.0in" height="2.8in"}
 

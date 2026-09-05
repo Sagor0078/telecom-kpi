@@ -24,10 +24,10 @@ attribution comparable across datasets instead of switching explainer family
 per leg. The negative result and the design are aligned rather than in
 tension.
 
-The second is the one an operator should act on. Section 6.5 finds that
-none of the four confidence and explanation-quality signals the framework
-produces \-- predicted probability, attribution entropy, rank stability,
-deletion-test faithfulness \-- separates the events where localization was
+The second is the one an operator should act on. Section 6.5 finds that none
+of the four confidence and explanation-quality signals the framework
+produces (predicted probability, attribution entropy, rank stability,
+deletion-test faithfulness) separates the events where localization was
 correct from those where it was wrong; two of the four point marginally in
 the wrong direction. This matters because the intuitive next engineering
 step, once a pipeline emits several quality signals, is to combine them into
@@ -44,7 +44,7 @@ visible because localization ground truth existed to partition events
 against. A study without such labels would have observed stable, faithful,
 confident explanations and concluded the explanation layer was working. This
 is the argument for insisting on datasets with root-cause ground truth even
-when they are less realistic than the alternative \-- and, conversely, the
+when they are less realistic than the alternative. Conversely, it is the
 reason the localization scores in this paper carry a caveat: they exist for
 SMD, the least telecom-like of the three legs.
 

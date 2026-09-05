@@ -84,12 +84,12 @@ held-out EVAL block contains 33 sessions and 26 anomaly segments at a
 
 *RCAEval* is split by case, **stratified by fault type**. An initial
 chronological split by injection time was found to segregate fault types
-perfectly — TRAIN received all CPU and memory cases, EVAL all packet-loss,
-CALIB all disk — which is a confounded split rather than a hard one.
-Section 6.1 reports what that error produced and why the corrected split
-still does not rescue early warning on this leg. After stratification the
-per-block positive rates are 0.513 / 0.499 / 0.513, and EVAL holds 25
-cases spanning all five fault types at a 0.498 base rate.
+perfectly (TRAIN received all CPU and memory cases, EVAL all packet-loss,
+CALIB all disk), which is a confounded split rather than a hard one. Section
+6.1 reports what that error produced and why the corrected split still does
+not rescue early warning on this leg. After stratification the per-block
+positive rates are 0.513 / 0.499 / 0.513, and EVAL holds 25 cases spanning
+all five fault types at a 0.498 base rate.
 
 *SMD*'s eight ground-truth segments are not spread evenly across the
 28,479-step timeline: segments 1-5 fall in \[15849, 21195\], segments 6-8
@@ -133,8 +133,8 @@ reversed, hand-specified illustrative topology graph (Section 6.8), not fit
 to SMD, which has no topology.
 
 Hyperparameters were fixed by hand from the SMD leg and reused verbatim on
-TelecomTS and RCAEval. This is deliberate — it keeps the three legs
-comparable — but it means no leg is tuned, and the reported numbers are
+TelecomTS and RCAEval. This is deliberate, since it keeps the three legs
+comparable, but it means no leg is tuned, and the reported numbers are
 therefore untuned-baseline numbers rather than best-achievable ones.
 
 ## 5.6 Metrics
