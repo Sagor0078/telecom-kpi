@@ -16,5 +16,13 @@ paper/*.synctex.gz
 paper/*.bbl
 paper/*.blg
 
+# Explicitly ignored manuscript artifacts
+paper/TrustNet-RCA_Research_Proposal.docx
+paper/Trustworthy_RCA_Framework_Paper_IEEE.docx
+paper/Trustworthy_RCA_Framework_Paper_IEEE.tex
+paper/Trustworthy_RCA_Framework_Paper.tex
+
+
+
 # LibreOffice lock files
 paper/.~lock.*#
