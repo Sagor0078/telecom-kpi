@@ -51,6 +51,18 @@ for ref in re.findall(r'!\[\]\(([^)]+)\)', body):
     if not (paper_dir / rel).exists():
         problems.append(f'missing figure: {rel}')
 
+# A soft line break after a hyphen is rendered as a space by every pandoc
+# target, so "root-\ncause" silently ships as "root- cause". Reject rather
+# than join: a line-final hyphen is occasionally a deliberate suspended
+# hyphen ("pre- and post-onset"), and only the author can tell them apart.
+# frontmatter.md is checked here too even though it is not part of the body.
+for path in sorted(src_dir.glob('*.md')):
+    for n, line in enumerate(path.read_text().splitlines(), 1):
+        if (line.endswith('-') and not line.lstrip().startswith('|')
+                and not set(line.strip()) <= set('-: ')):
+            problems.append(f'{path.name}:{n}: line ends in a hyphen, which '
+                            f'renders as "{line.split()[-1]} <next word>"')
+
 # Em dashes are not used in this paper; commas, colons, parentheses or a
 # sentence break carry the same joins. Reject them rather than converting.
 for m in re.finditer(r'\\--| -- |\u2014', body):

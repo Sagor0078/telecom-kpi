@@ -16,8 +16,8 @@ at all.
 
 Feature-attribution methods such as SHAP \[1\] answer the first of these
 questions but are, by construction, correlational: a KPI can score highly
-because it moves together with the fault without driving it. Causal-
-discovery methods such as Granger causality \[2\] and constraint-based
+because it moves together with the fault without driving it.
+Causal-discovery methods such as Granger causality \[2\] and constraint-based
 causal graphs \[3\] address this but are rarely paired with a calibrated
 confidence signal, so a causal claim is reported with the same false
 certainty as a correlational one. Conformal prediction \[4\] supplies
@@ -28,22 +28,22 @@ the value that a causal filter or a calibration layer adds on top.
 
 This paper makes three contributions. First, we propose **TrustNet-RCA**, a
 five-component framework (predict, attribute, causally filter, calibrate,
-explain) that makes each of these questions an explicit, separately-
-evaluable pipeline stage rather than an implicit property of one end-to-end
+explain) that makes each of these questions an explicit,
+separately-evaluable pipeline stage rather than an implicit property of one end-to-end
 model. Second, we implement it with standard, off-the-shelf methods at each
 stage and evaluate it under one identical method on three public datasets
 with complementary jobs: TelecomTS \[22\], a 5G testbed dataset with 18
 named PHY/MAC/network-layer KPIs, as the primary 5G RAN benchmark; RCAEval
 \[5\], with annotated microservice failures, for service-management and RCA
-rigor; and the Server Machine Dataset (SMD) \[7\] strictly as an out-of-
-domain generalization check. Running one method across three domains is what
+rigor; and the Server Machine Dataset (SMD) \[7\] strictly as an
+out-of-domain generalization check. Running one method across three domains is what
 allows the paper to separate what is a property of the framework from what
 is a property of a dataset. Third, we report what we found rather than what
 we hoped, and two of the most useful results are negative: attention models
 lose to gradient-boosted trees on every leg at 4-82x the training cost, and
 none of the confidence or explanation-quality signals the framework produces
 distinguishes a correct root-cause localization from an incorrect one. We
-define the concrete experimental programme (Section 9) required to elevate
+define the concrete experimental programme (Section 8) required to elevate
 these findings to generalizable evidence.
 
 The remainder of this paper is organized as follows. Section 2 reviews
@@ -52,5 +52,6 @@ graph-neural-network, causal, and LLM-based approaches to RCA, and
 situates the identified gap. Section 3 formalizes the prediction,
 attribution, causal-filtering, and calibration problems. Section 4
 describes the proposed framework and its five components. Section 5 details the three-dataset experimental setup. Section 6 reports results for each component across all three legs. Section 7 discusses the findings, Section 8 states
-limitations and threats to validity, Section 9 outlines practical
-implications and future work, and Section 10 concludes.
+the limitations and threats to validity together with the future work each
+implies, Section 9 draws out the practical implications, and Section 10
+concludes.

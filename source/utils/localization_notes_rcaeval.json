@@ -1,0 +1,11 @@
+{
+  "cases": {
+    "train": 73,
+    "eval": 25,
+    "calib": 25
+  },
+  "common_columns": 24,
+  "window": 60,
+  "stride": 10,
+  "skipped_no_gt_or_runway": []
+}

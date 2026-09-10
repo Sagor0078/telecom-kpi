@@ -11,12 +11,14 @@ figure (fig4) and labelled as such, rather than plotted with a misleading value.
 """
 from __future__ import annotations
 
+import json
 import pickle
 from pathlib import Path
 
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.patches import FancyBboxPatch
 import numpy as np
 import pandas as pd
 from sklearn.metrics import precision_recall_curve, roc_curve
@@ -31,15 +33,40 @@ FAMILY_COLORS = {
     "Attention": "#6a1b9a", "Deep ensemble": "#00838f", "Ensemble": "#455a64",
 }
 
-# Window counts and positive rates per block, from the executed runs (§14.1).
-SPLITS = {
-    "TelecomTS\n(early warning, 5 s)": {"TRAIN": (48749, 0.0857), "EVAL": (3840, 0.1674),
-                                        "CALIB": (10487, 0.0403)},
-    "RCAEval RE1/OB\n(detection)": {"TRAIN": (29893, 0.5134), "EVAL": (9980, 0.4985),
-                                    "CALIB": (10285, 0.5134)},
-    "SMD machine-1-1\n(early warning, 30 min)": {"TRAIN": (24751, 0.066), "EVAL": (4151, 0.286),
-                                                 "CALIB": (5430, 0.017)},
-}
+# Window counts, positive rates and EVAL base rates come from the run that produced the tables,
+# via utils/section14_summary.json (written by src/run_section14.py). They used to be transcribed
+# into this file by hand, which is how the figures went on rendering a split whose own artifacts
+# had gone missing: `_load_tables` raised on the absent CSVs, but every constant here still
+# claimed the numbers were current. Read them, do not copy them.
+SUMMARY_PATH = Path("utils/section14_summary.json")
+
+# SMD is reported in §6 rather than by run_section14.py, so its split stays declared here.
+SMD_SPLIT = {"TRAIN": (24751, 0.066), "EVAL": (4151, 0.286), "CALIB": (5430, 0.017)}
+LEG_TITLES = {"telecomts": "TelecomTS\n(early warning, 5 s)",
+              "rcaeval": "RCAEval RE1/OB\n(detection)"}
+
+
+def _summary() -> dict:
+    if not SUMMARY_PATH.exists():
+        raise FileNotFoundError(
+            f"{SUMMARY_PATH} is missing. Run `python -m src.run_section14` first; the figures are "
+            "generated from that run's artifacts, not from constants stored in this file.")
+    return json.loads(SUMMARY_PATH.read_text())
+
+
+def _splits() -> dict:
+    su = _summary()
+    out = {}
+    for leg, title in LEG_TITLES.items():
+        w, pr = su[leg]["windows"], su[leg]["pos_rate"]
+        out[title] = {b.upper(): (w[b], pr[b]) for b in ("train", "eval", "calib")}
+    out["SMD machine-1-1\n(early warning, 30 min)"] = SMD_SPLIT
+    return out
+
+
+def _base_rate(leg: str) -> float:
+    """EVAL positive rate for one leg — the reference line on the PR panels."""
+    return _summary()[leg]["pos_rate"]["eval"]
 
 
 def _save(fig, name):
@@ -51,43 +78,130 @@ def _save(fig, name):
 
 
 def fig1_framework():
-    """The three-leg evaluation architecture (§14)."""
-    fig, ax = plt.subplots(figsize=(9, 5.2))
-    ax.set_xlim(0, 10); ax.set_ylim(0, 6); ax.axis("off")
+    """The three-leg evaluation architecture (§14), as a full-width figure.
 
-    ax.add_patch(plt.Rectangle((3.6, 5.1), 2.8, 0.65, fc="#eceff1", ec="#37474f", lw=1.4))
-    ax.text(5, 5.42, "Proposed framework", ha="center", va="center", fontsize=11, weight="bold")
-
-    legs = [
-        (1.7, "TelecomTS", "5G RAN domain\nvalidity",
-         "AD + telecom RCA\n+ early warning\n(seconds-scale)", "anchors 1, 2, 4, 5", "#c62828"),
-        (5.0, "RCAEval", "RCA / service-mgmt\nrigor",
-         "root-cause quality\n+ baseline comparison\n(detection only)", "anchors 1, 3", "#1565c0"),
-        (8.3, "SMD", "out-of-domain\ngeneralization",
-         "robustness across\nserver telemetry", "RQ4 evidence", "#2e7d32"),
+    Bullet content is deliberately narrower than each dataset's headline description, because the
+    figure has to describe *this* evaluation rather than the datasets' capabilities: RE1 / Online
+    Boutique ships no logs or traces (only RE2/RE3 do, and they are untouched), one SMD machine of
+    28 is used, TelecomTS is testbed-derived rather than operator telemetry, and no external RCA
+    baseline is compared anywhere. A figure claiming otherwise would contradict §VIII.
+    """
+    LEGS = [
+        {"key": "tts", "name": "TelecomTS", "role": "5G RAN domain validity",
+         "fill": "#fdecea", "edge": "#c62828",
+         "facts": ["5G testbed telemetry (not operator)", "18 named PHY/MAC/network KPIs",
+                   "109 segments, 11 anomaly types", "Reconstructed 10 Hz series"],
+         "job": "Anomaly Detection\n+ Telecom RCA\n+ Early Warning",
+         "does": ["Early warning at a 5 s horizon", "Localization vs. affected_kpis",
+                  "Per-anomaly-type breakdown", "Pre-onset runway feasibility"],
+         "anchor": "TNSM anchors: 1, 2, 4, 5"},
+        {"key": "rce", "name": "RCAEval", "role": "RCA / service-management rigor",
+         "fill": "#e8f0fe", "edge": "#1565c0",
+         "facts": ["RE1 / Online Boutique: 123 cases", "24 common metric columns",
+                   "5 fault types, root-cause service", "Injections are known interventions"],
+         "job": "Root-Cause Quality\n+ Detection",
+         "does": ["Localization vs. root-cause service", "Detection only (no anticipation)",
+                  "Per-fault-type breakdown", "Causal filter on known onsets"],
+         "anchor": "TNSM anchors: 1, 3"},
+        {"key": "smd", "name": "SMD", "role": "Out-of-domain generalization",
+         "fill": "#e8f5e9", "edge": "#2e7d32",
+         "facts": ["machine-1-1 of 28, 38 dims", "Real-world server telemetry",
+                   "8 segments, dimension-level truth", "Widely used AD benchmark"],
+         "job": "Robustness Across\nServer Telemetry",
+         "does": ["Out-of-domain generalization", "Conformal coverage + abstention",
+                  "Explanation faithfulness audit", "Dimension-level localization"],
+         "anchor": "RQ4 evidence"},
     ]
-    ax.plot([5, 5], [5.1, 4.75], color="#37474f", lw=1.4)
-    ax.plot([1.7, 8.3], [4.75, 4.75], color="#37474f", lw=1.4)
+    INK = "#37474f"
 
-    for x, name, role, output, anchor, color in legs:
-        ax.annotate("", xy=(x, 4.15), xytext=(x, 4.75),
-                    arrowprops=dict(arrowstyle="-|>", color="#37474f", lw=1.4))
-        ax.add_patch(plt.Rectangle((x - 1.35, 3.25), 2.7, 0.9, fc=color, ec="none", alpha=0.13))
-        ax.text(x, 3.90, name, ha="center", fontsize=11, weight="bold", color=color)
-        ax.text(x, 3.52, role, ha="center", fontsize=8.5, color="#37474f")
+    fig, ax = plt.subplots(figsize=(10, 6.4))
+    fig.subplots_adjust(left=0, right=1, top=1, bottom=0)
+    ax.set_xlim(-0.5, 100.5); ax.set_ylim(0, 100); ax.axis("off")
 
-        ax.annotate("", xy=(x, 2.55), xytext=(x, 3.25),
-                    arrowprops=dict(arrowstyle="-|>", color="#37474f", lw=1.2))
-        ax.add_patch(plt.Rectangle((x - 1.35, 1.6), 2.7, 0.95, fc="white", ec=color, lw=1.2))
-        ax.text(x, 2.07, output, ha="center", va="center", fontsize=8.5, color="#263238")
+    def card(x0, x1, y0, y1, fill, edge, lw=1.3):
+        ax.add_patch(FancyBboxPatch((x0, y0), x1 - x0, y1 - y0,
+                                    boxstyle="round,pad=0,rounding_size=1.4",
+                                    fc=fill, ec=edge, lw=lw, zorder=2))
 
-        ax.annotate("", xy=(x, 0.95), xytext=(x, 1.6),
-                    arrowprops=dict(arrowstyle="-|>", color="#37474f", lw=1.2))
-        ax.text(x, 0.66, anchor, ha="center", fontsize=8.5, style="italic", color=color)
+    def bullets(items, xc, x_left, y_top, size, color=INK, step=4.0):
+        for i, text in enumerate(items):
+            y = y_top - i * step
+            ax.text(x_left, y, "\u2022", ha="center", va="center", fontsize=size,
+                    color=color, zorder=3)
+            ax.text(x_left + 1.7, y, text, ha="left", va="center", fontsize=size,
+                    color=color, zorder=3)
 
-    ax.text(5, 0.06, "TNSM scope anchors: 1 Management Functions · 2 Reliability & QA · "
-                     "3 Enabling Technologies · 4 Emerging Tech · 5 Applications",
-            ha="center", fontsize=7.5, color="#607d8b")
+    def elbow(x_from, y_from, x_to, y_to, y_mid):
+        """Right-angled connector: down, across, then into the target with an arrow head."""
+        ax.plot([x_from, x_from], [y_from, y_mid], color=INK, lw=1.3, zorder=1)
+        ax.plot([x_from, x_to], [y_mid, y_mid], color=INK, lw=1.3, zorder=1)
+        ax.annotate("", xy=(x_to, y_to), xytext=(x_to, y_mid),
+                    arrowprops=dict(arrowstyle="-|>", color=INK, lw=1.3, shrinkA=0, shrinkB=0))
+
+    def down(x, y_from, y_to):
+        ax.annotate("", xy=(x, y_to), xytext=(x, y_from),
+                    arrowprops=dict(arrowstyle="-|>", color=INK, lw=1.3, shrinkA=0, shrinkB=0))
+
+    # ---- top: the framework -------------------------------------------------
+    card(17, 83, 90.0, 99.5, "#eceff1", INK, lw=1.5)
+    ax.text(50, 96.4, "Proposed Framework", ha="center", va="center",
+            fontsize=14, weight="bold", color="#263238", zorder=3)
+    ax.text(50, 92.4, "(Anomaly Detection, Root-Cause Analysis and Early Warning "
+                      "for Network Management)",
+            ha="center", va="center", fontsize=8.2, color=INK, zorder=3)
+
+    COL_W, GAP = 29.0, 4.0
+    x0s = [2.5 + i * (COL_W + GAP) for i in range(3)]
+
+    for leg, x0 in zip(LEGS, x0s):
+        x1, xc = x0 + COL_W, x0 + COL_W / 2
+
+        # ---- dataset card ---------------------------------------------------
+        card(x0, x1, 62.5, 87.5, leg["fill"], leg["edge"], lw=1.2)
+        ax.text(xc, 84.6, leg["name"], ha="center", va="center", fontsize=13.5,
+                weight="bold", color=leg["edge"], zorder=3)
+        ax.text(xc, 81.0, leg["role"], ha="center", va="center", fontsize=9.2,
+                color=INK, zorder=3)
+        ax.plot([x0 + 3, x1 - 3], [78.6, 78.6], color=leg["edge"], lw=0.8, alpha=0.55, zorder=3)
+        bullets(leg["facts"], xc, x0 + 2.6, 75.6, 8.8)
+
+        # ---- what the leg evaluates -----------------------------------------
+        card(x0, x1, 30.5, 56.5, "white", leg["edge"], lw=1.6)
+        ax.text(xc, 53.4, leg["job"], ha="center", va="top", fontsize=10.8,
+                weight="bold", color="#263238", linespacing=1.4, zorder=3)
+        # Titles run to two or three lines, so the bullet list starts below whichever it is
+        # rather than at a fixed height the three-line title would collide with.
+        bullets(leg["does"], xc, x0 + 2.6,
+                53.4 - 3.5 * leg["job"].count("\n") - 5.3, 8.6, step=3.2)
+
+        # ---- anchor tag ------------------------------------------------------
+        card(x0 + 1.5, x1 - 1.5, 24.5, 29.5, leg["fill"], leg["fill"], lw=0)
+        ax.text(xc, 27.0, leg["anchor"], ha="center", va="center", fontsize=9.0,
+                style="italic", color=leg["edge"], zorder=3)
+
+        down(xc, 62.5, 56.7)          # dataset -> job
+        down(xc, 30.5, 29.7)          # job -> anchor tag
+        elbow(50, 89.8, xc, 87.7, 88.7)   # framework -> dataset
+        elbow(xc, 24.5, 50, 20.7, 22.0)   # anchor tag -> synthesis
+
+    # ---- bottom: synthesis --------------------------------------------------
+    card(28, 72, 11.5, 20.5, "#ede7f6", "#4527a0", lw=1.5)
+    ax.text(50, 17.6, "Comprehensive Evaluation and Analysis", ha="center", va="center",
+            fontsize=12.6, weight="bold", color="#263238", zorder=3)
+    ax.text(50, 13.9, "(Network and Service Management Perspective)", ha="center", va="center",
+            fontsize=8.6, color=INK, zorder=3)
+
+    # ---- scope-anchor legend ------------------------------------------------
+    ax.add_patch(FancyBboxPatch((1.5, 1.0), 97, 7.6,
+                                boxstyle="round,pad=0,rounding_size=1.2",
+                                fc="none", ec="#90a4ae", lw=1.0, ls="--", zorder=2))
+    ax.text(50, 6.3, "TNSM scope anchors:    1) Management Functions    "
+                     "2) Service Provisioning, Reliability & Quality Assurance",
+            ha="center", va="center", fontsize=8.4, color=INK, zorder=3)
+    ax.text(50, 3.2, "3) Enabling Technologies    4) Emerging Technologies & Standards    "
+                     "5) Applications and Case Studies",
+            ha="center", va="center", fontsize=8.4, color=INK, zorder=3)
+
     _save(fig, "fig1_framework.png")
 
 
@@ -96,7 +210,7 @@ def fig2_data_splits():
     fig, axes = plt.subplots(1, 3, figsize=(12, 3.6))
     colors = {"TRAIN": "#1565c0", "EVAL": "#c62828", "CALIB": "#00838f"}
 
-    for ax, (ds, blocks) in zip(axes, SPLITS.items()):
+    for ax, (ds, blocks) in zip(axes, _splits().items()):
         names = list(blocks)
         counts = [blocks[b][0] for b in names]
         rates = [blocks[b][1] for b in names]
@@ -127,8 +241,8 @@ def fig3_model_comparison():
     fig, axes = plt.subplots(1, 2, figsize=(13, 6))
 
     for ax, df, title, base in [
-        (axes[0], t, "TelecomTS — early warning, 5 s", 0.167),
-        (axes[1], r, "RCAEval RE1/OB — detection", 0.498),
+        (axes[0], t, "TelecomTS — early warning, 5 s", _base_rate("telecomts")),
+        (axes[1], r, "RCAEval RE1/OB — detection", _base_rate("rcaeval")),
     ]:
         d = df.sort_values("auprc")
         ax.barh(d.model, d.auprc, color=[FAMILY_COLORS.get(f, "#999") for f in d.family],
@@ -212,8 +326,10 @@ def fig6_roc_pr(scratch: str):
     fig, axes = plt.subplots(2, 2, figsize=(11, 9))
 
     for col, (pkl, title, base) in enumerate([
-        (f"{scratch}/tts_preds.pkl", "TelecomTS — early warning, 5 s", 0.167),
-        (f"{scratch}/rcae_preds.pkl", "RCAEval RE1/OB — detection", 0.498),
+        (f"{scratch}/tts_preds.pkl", "TelecomTS — early warning, 5 s",
+         _base_rate("telecomts")),
+        (f"{scratch}/rcae_preds.pkl", "RCAEval RE1/OB — detection",
+         _base_rate("rcaeval")),
     ]):
         d = pickle.load(open(pkl, "rb"))
         y, preds = d["ev_y"], d["preds"]

@@ -33,7 +33,7 @@ events those are turns out to matter more than the mean.
 Localization is scored on SMD only. Both TelecomTS (named `affected_kpis`)
 and RCAEval (root-cause service and indicator) ship localization ground
 truth and both loaders expose it, but the ranking is not yet scored on
-either; that is the immediate next experiment (Section 9).
+either; that is the immediate next experiment (Section 8).
 
 ## 6.4 Component 3: Correlation vs. causal evidence
 
@@ -55,8 +55,8 @@ candidates.**
 | 33 | No | 0.026 | 0.791 | Correlational only |
 
 The two dimensions that are both highly correlated and in the ground-truth
-root-cause set (9, 13) pass the Granger test; the three that are only SHAP-
-flagged noise (weak correlation, absent from ground truth) fail it, the
+root-cause set (9, 13) pass the Granger test; the three that are only
+SHAP-flagged noise (weak correlation, absent from ground truth) fail it, the
 intended separation, though demonstrated here on one incident rather than
 across a statistically powered sample (Section 8).
 

@@ -14,8 +14,8 @@ a non-parametric dynamic threshold. Self-attention architectures improve on
 recurrence for long-range temporal dependence \[10\]; TranAD \[11\] uses an
 adversarially trained transformer encoder for multivariate anomaly
 detection. Closest to our domain, \[12\] fuses a transformer temporal
-encoder with a graph neural network over 5G RAN topology for anomaly root-
-causing. That is effectively Components 1 and 2 of our framework, evaluated
+encoder with a graph neural network over 5G RAN topology for anomaly
+root-causing. That is effectively Components 1 and 2 of our framework, evaluated
 on real (non-public) RAN data but without a causal-versus-correlational
 distinction or calibrated uncertainty.
 

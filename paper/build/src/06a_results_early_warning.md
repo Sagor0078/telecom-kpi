@@ -169,8 +169,8 @@ scheduled intervention from pre-intervention telemetry is not a learnable
 problem. The second was our own method error: splitting cases
 chronologically by injection time perfectly segregated fault types across
 blocks, and cases are independent experiments, so the split must be
-stratified by fault type. It now is. The consequence is that **the early-
-warning anchor of this paper rests on TelecomTS alone**, a real
+stratified by fault type. It now is. The consequence is that **the
+early-warning anchor of this paper rests on TelecomTS alone**, a real
 concentration of risk that we state in Section 8 rather than smooth over.
 
 ## 6.2 Accuracy and calibration pull in opposite directions
@@ -215,8 +215,8 @@ LSTM *loses* accuracy. ECE improvements are consistent in sign but small
 (0.000 to 0.011), materially weaker than the deep-ensemble literature
 suggests, and reported as measured. Two practical notes: the MLP matches
 LSTM and GRU accuracy at roughly a tenth of the cost (1.5 s vs. 12.6 and
-13.7 s), and the 5-member 1D ResNet ensemble is the best accuracy-
-calibration compromise on TelecomTS at AUPRC 0.743 and ECE 0.079.
+13.7 s), and the 5-member 1D ResNet ensemble is the best
+accuracy-calibration compromise on TelecomTS at AUPRC 0.743 and ECE 0.079.
 
 ![](figures/fig7_deep_ensemble.png){width="7.0in" height="2.5in"}
 

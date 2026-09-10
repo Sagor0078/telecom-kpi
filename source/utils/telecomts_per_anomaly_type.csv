@@ -1,0 +1,12 @@
+anomaly_type,auprc,n_windows,base_rate
+Jamming,0.8808,45,0.0087
+High Network Congestion (Gradual Buildup),0.8787,28,0.00543
+Antenna Failure,0.77,79,0.01517
+Co-Channel Interference (Mild),0.6125,139,0.02639
+Buffer Overflow (Gradual Buildup),0.5883,38,0.00736
+Co-Channel Interference (Severe),0.4196,40,0.00774
+Doppler Shift (Severe),0.4163,50,0.00966
+Faulty Handover Algorithm (Too Frequent),0.2935,59,0.01137
+Resource Allocation Bugs,0.0974,8,0.00156
+High Network Congestion (Sudden Spike),0.0586,9,0.00175
+Faulty RF Filters (Temporal),0.0347,8,0.00156

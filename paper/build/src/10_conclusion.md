@@ -4,8 +4,8 @@ We presented TrustNet-RCA, a five-component framework that treats
 trustworthiness as a set of separately measurable properties (prediction,
 attribution, causal filtering, explanation, and calibrated uncertainty)
 rather than as an emergent quality of one opaque model, and evaluated it
-under one identical method across a 5G RAN benchmark (TelecomTS), a service-
-management RCA benchmark (RCAEval), and an out-of-domain server telemetry
+under one identical method across a 5G RAN benchmark (TelecomTS), a
+service-management RCA benchmark (RCAEval), and an out-of-domain server telemetry
 benchmark (SMD).
 
 Three results are worth carrying forward. First, gradient-boosted trees beat
@@ -33,5 +33,5 @@ instrumentable against ground truth on a public 5G benchmark. They do not
 establish that it outperforms simpler alternatives, that localization
 transfers beyond SMD, or that any of it survives contact with an operator
 network. Those claims require the multi-seed, multi-system, statistically
-validated study defined in Section 9, which we intend as the next stage of
+validated study defined in Section 8, which we intend as the next stage of
 this work.

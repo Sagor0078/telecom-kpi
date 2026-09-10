@@ -1,0 +1,20 @@
+# Dataset caches: ~1.1 GB of TelecomTS shards plus the RCAEval case files,
+# re-downloaded on demand by src/telecomts.py and src/rcaeval.py.
+source/.cache/
+__pycache__/
+*.pyc
+
+# Generated paper outputs and LaTeX build products
+paper/*.tex
+paper/*.docx
+paper/*.aux
+paper/*.log
+paper/*.out
+paper/*.fls
+paper/*.fdb_latexmk
+paper/*.synctex.gz
+paper/*.bbl
+paper/*.blg
+
+# LibreOffice lock files
+paper/.~lock.*#

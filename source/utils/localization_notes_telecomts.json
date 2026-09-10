@@ -1,0 +1,10 @@
+{
+  "sessions": {
+    "train": 55,
+    "eval": 18,
+    "calib": 26
+  },
+  "window": 30,
+  "horizon": 50,
+  "stride": 10
+}

@@ -1,14 +1,18 @@
-# IEEE DOCX build pipeline
+# IEEE build pipeline
 
-Rebuilds `../Trustworthy_RCA_Framework_Paper_IEEE.docx` — the IEEE
-Transactions two-column manuscript for TNSM submission — from Markdown.
+Rebuilds the IEEE Transactions two-column manuscript for TNSM submission
+from Markdown, in either target format.
 
 ```bash
 ./build.sh                 # writes ../Trustworthy_RCA_Framework_Paper_IEEE.docx
+./build_tex.sh             # writes ../Trustworthy_RCA_Framework_Paper_IEEE.tex
 ./build.sh /tmp/draft.docx # or somewhere else
 ```
 
-Requires `pandoc` and `python-docx`. No LaTeX toolchain.
+Both read the same `src/` and share `splice.py`, so the two manuscripts
+cannot drift apart. `build.sh` needs `pandoc` and `python-docx` and no LaTeX
+toolchain; `build_tex.sh` needs only `pandoc`, and produces a `.tex` that
+compiles with `pdflatex`.
 
 ## Why a pipeline and not just a .docx
 
@@ -19,8 +23,9 @@ section-properties or style manipulation applied after conversion.
 
 ## Editing the paper
 
-**Edit the Markdown in `src/`, then re-run `./build.sh`.** Edits made
-directly to the generated `.docx` are lost on the next build.
+**Edit the Markdown in `src/`, then re-run the build.** Edits made directly
+to the generated `.docx` or `.tex` are lost on the next build; both files
+carry a header saying so.
 
 Every section is its own file. `splice.py` concatenates them in filename
 order, so the numeric prefixes are what determine sequence — rename to
@@ -74,6 +79,15 @@ introducing an appositive becomes a comma or a colon.
 body and aborts the build, quoting the offending sentence, so one cannot
 creep back in through an edit or a paste.
 
+### No hyphen at the end of a line
+
+Pandoc reads a soft line break as a space, so a compound split across lines
+(`root-` / `cause`) ships as "root- cause" in both targets. Keep the whole
+compound on one line. `splice.py` rejects a line-final hyphen and names the
+file and line; if the hyphen is a deliberate suspended one ("pre- and
+post-onset"), move it off the end of the line rather than disabling the
+check.
+
 The two exceptions are the `Abstract—` and `Index Terms—` prefixes, which
 are prescribed by the IEEE template and are emitted by `assemble.py`, not by
 the Markdown. They are formatting marks rather than prose punctuation.
@@ -118,9 +132,42 @@ themselves**.
 | `splice.py` | Concatenates `src/*.md` in filename order and **validates**: sections numbered 1..N with no gaps, subsections belonging to their parent and lettered without gaps, References last, every referenced figure present. Any failure aborts the build with a specific message. |
 | `transform.py` | Parses `frontmatter.md`, renumbers headings and cross-references to IEEE style, sets figure widths, and normalises dashes and escapes. |
 | `assemble.py` | Prepends the single-column title block, wraps wide tables and figures in full-width sections, sets tables to 8pt autofit. |
+| `to_latex.py` | The LaTeX target, in place of `transform.py`/`assemble.py`: emits an IEEEtran journal document, converting pandoc's `longtable` to `table`/`table*` (longtable cannot be used in two-column mode), bare images to `figure`/`figure*` floats, `\[...\]` to numbered `equation`, `Section 5.3` to `Section~\ref{sec:5.3}`, and the reference list to `thebibliography` with `\cite` keys. |
 
 ## Verifying a build
 
 `libreoffice --headless --convert-to pdf` renders it for checking. Confirm
 the page count, that figure and table numbering has no gaps, and that no
 stray `\` escapes or literal `##` survive into the text.
+
+## Verifying a LaTeX build
+
+The `.tex` sits in `paper/` so that `figures/` resolves the same way it does
+in the Markdown. Compile in place:
+
+```bash
+cd paper && latexmk -pdf Trustworthy_RCA_Framework_Paper_IEEE.tex
+```
+
+`IEEEtran.cls` comes from `texlive-publishers`; on Debian or Ubuntu:
+
+```bash
+sudo apt install texlive-latex-recommended texlive-publishers \
+                 texlive-science texlive-fonts-recommended latexmk
+```
+
+Overleaf carries IEEEtran already: upload the `.tex` and the `figures/`
+directory and it compiles unchanged.
+
+### Numbering differences from the .docx
+
+Sections are numbered by IEEEtran rather than written into the headings, and
+every cross-reference is a `\ref`, so `Section 5.3` renders IEEE-style as
+"Section V-C" here against "Section V.3" in the `.docx`.
+
+Figures and tables keep the numbers written in their captions, which are the
+numbers of the notebook figures that produced them and are deliberately not
+document order (Figure 6 precedes Figure 9, which precedes Figure 5). Each
+float sets its counter explicitly so the two targets number identically. A
+renumbered or newly inserted figure therefore needs its caption edited, not
+just its position moved.

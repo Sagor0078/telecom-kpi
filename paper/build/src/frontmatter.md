@@ -8,13 +8,13 @@ ABSTRACT: Telecom operators increasingly deploy machine learning to predict
 service degradation, but an accurate prediction is not the same as a
 trustworthy one: an engineer also needs to know which KPI is responsible,
 whether that KPI is merely correlated with the fault or plausibly causes it,
-why the system believes so, and how confident to be. Prior work on root-
-cause analysis (RCA) for multivariate telemetry typically evaluates a single
+why the system believes so, and how confident to be. Prior work on
+root-cause analysis (RCA) for multivariate telemetry typically evaluates a single
 mechanism (feature attribution, causal discovery, or uncertainty
 quantification) in isolation; no study we identified jointly integrates and
 evaluates all three against ground-truth root-cause labels. We present
-TrustNet-RCA, a five-component framework chaining (1) a probabilistic early-
-warning predictor, (2) exact feature attribution, (3) a causal-precedence
+TrustNet-RCA, a five-component framework chaining (1) a probabilistic
+early-warning predictor, (2) exact feature attribution, (3) a causal-precedence
 filter, (4) an evidence-grounded explainer, and (5) distribution-free
 uncertainty calibration, and evaluate it under one identical method on three
 public datasets: TelecomTS (5G testbed telemetry, 18 named PHY/MAC/network

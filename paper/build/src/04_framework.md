@@ -47,8 +47,8 @@ tier, not a proof.
 
 Input: the outputs of Components 1, 2, 3, and 5. Method: a template grounded
 strictly in the evidence already computed (not a free-generation LLM call),
-following the narrate-don\'t-diagnose pattern from RCACopilot- and RCAgent-
-style systems \[17\], \[18\]; an LLM may phrase the narrative fluently but
+following the narrate-don\'t-diagnose pattern from RCACopilot- and
+RCAgent-style systems \[17\], \[18\]; an LLM may phrase the narrative fluently but
 may not assert any fact absent from the evidence. Output: a short report
 stating what is predicted, how confident, which KPI/NE is implicated,
 whether that evidence is causal or correlational, and what changed

@@ -1,0 +1,64 @@
+{
+  "telecomts": {
+    "windows": {
+      "train": 94766,
+      "eval": 5631,
+      "calib": 6566
+    },
+    "pos_rate": {
+      "train": 0.0353,
+      "eval": 0.0893,
+      "calib": 0.2129
+    },
+    "sessions": {
+      "train": 55,
+      "eval": 18,
+      "calib": 26
+    },
+    "best": {
+      "model": "XGBoost",
+      "auroc": 0.96795513967676,
+      "auprc": 0.8687203689048199,
+      "ece": 0.020693340248958695
+    }
+  },
+  "rcaeval": {
+    "windows": {
+      "train": 14983,
+      "eval": 5002,
+      "calib": 5155
+    },
+    "pos_rate": {
+      "train": 0.5122,
+      "eval": 0.4972,
+      "calib": 0.5121
+    },
+    "cases": {
+      "train": 73,
+      "eval": 25,
+      "calib": 25
+    },
+    "common_columns": 24,
+    "best": {
+      "model": "Random Forest",
+      "auroc": 0.995899472485553,
+      "auprc": 0.996565404173293,
+      "ece": 0.055696103272376715
+    }
+  },
+  "case_study": {
+    "session": "A-File-No-No@17356896330",
+    "type": "Jamming",
+    "segment": [
+      0,
+      4827
+    ],
+    "affected": [
+      "DL_BLER",
+      "UL_BLER",
+      "UL_MCS",
+      "TX_Bytes",
+      "RX_Bytes"
+    ]
+  }
+}

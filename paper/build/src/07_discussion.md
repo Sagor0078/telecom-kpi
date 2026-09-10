@@ -50,6 +50,6 @@ SMD, the least telecom-like of the three legs.
 
 These results establish that a joint pipeline is measurable and
 instrumentable across three domains under one method, not that it
-outperforms simpler alternatives. Section 8 states the limitations directly,
-and Section 9 defines the multi-seed, multi-baseline study required to make
-a comparative claim.
+outperforms simpler alternatives. Section 8 states the limitations directly and
+defines the multi-seed, multi-baseline study required to make a comparative
+claim.
